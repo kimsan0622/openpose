@@ -278,6 +278,20 @@ public:
         }
     }
 
+    bool tryPush(std::vector<std::shared_ptr<Datum>>& l)
+    {
+        try
+        {
+            auto datumsPtr = std::make_shared<std::vector<std::shared_ptr<Datum>>>(l);
+            return opWrapper->tryPush(datumsPtr);
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return false;
+        }
+    }
+
     bool tryPop(std::vector<std::shared_ptr<Datum>>& l)
     {
         try
@@ -328,6 +342,7 @@ PYBIND11_MODULE(pyopenpose, m) {
         .def("waitAndPop", &WrapperPython::waitAndPop)
         .def("tryEmplace",  &WrapperPython::tryEmplace)
         .def("tryPop",  &WrapperPython::tryPop)
+        .def("tryPush",  &WrapperPython::tryPush)
         ;
 
     // Datum Object
